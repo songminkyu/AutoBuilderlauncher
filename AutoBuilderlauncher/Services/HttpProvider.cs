@@ -32,6 +32,7 @@ namespace AutoBuilderlauncher.Service
             {
                 HttpWebRequest HttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 HttpWebRequest.Method = Method;
+                HttpWebRequest.Timeout = 600000; //원격서버 빌드가 오래걸리므로 최대 10분까지 기다림
                 Stream RequestStream = null;
                 byte[] SendData = null;
 
