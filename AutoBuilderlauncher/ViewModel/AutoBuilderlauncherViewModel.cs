@@ -1,13 +1,7 @@
-﻿using AutoBuilderlauncher.CommandServices;
-using AutoBuilderlauncher.Model;
+﻿using AutoBuilderlauncher.Model;
 using AutoBuilderlauncher.Service;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace AutoBuilderlauncher.ViewModel
 {
@@ -16,10 +10,24 @@ namespace AutoBuilderlauncher.ViewModel
         public AutoBuilderlauncherViewModel()
         {
             LoadedCommand = new AsyncRelayCommand<object>(LoadedCommandExe);
+            ProductCategories = new ObservableCollection<ProductInfo>();
+            SelectedProductCategory = new ProductInfo();
         }
 
         private async Task LoadedCommandExe(object? arg)
         {
+            ProductCategories.Add(new ProductInfo()
+            {
+                Path = "",
+                OrganName = Enums.OrganCategory.AOS,
+                ProductName = Enums.ProductCategory.FFR_Portable
+            });
+            ProductCategories.Add(new ProductInfo()
+            {
+                Path = "",
+                OrganName = Enums.OrganCategory.AOS,
+                ProductName = Enums.ProductCategory.FFR
+            });            
             await Task.Run(async () =>
             {
                 /*
@@ -29,15 +37,9 @@ namespace AutoBuilderlauncher.ViewModel
                     "productName": "FFR"
                  }                 
                  */
-                ProductInfo FileExeInfo = new ProductInfo()
-                {
-                    Path = "",
-                    OrganName = Enums.OrganCategory.NEC,
-                    ProductName = Enums.ProductCategory.FFR
-                };
-
+        
                 HttpProvider httpProvider = new HttpProvider();                
-                await httpProvider.HttpSendMessage<ProductInfo>(FileExeInfo, "http://localhost:5159/FileExecution/run-file", "utf-8");                 
+                await httpProvider.HttpSendMessage<ProductInfo>(ProductCategories[0], "http://localhost:5159/ProductInfo/run-file", "utf-8");                 
             });
         }
     }

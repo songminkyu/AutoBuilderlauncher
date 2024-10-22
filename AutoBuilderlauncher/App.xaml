@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:AutoBuilderlauncher"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Theme/Styles.xaml"/>
     </Application.Resources>
 </Application>

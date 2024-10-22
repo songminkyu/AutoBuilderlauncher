@@ -18,8 +18,8 @@ namespace AutoBuilderlauncher.ViewModel
             }
         }
 
-        private ObservableCollection<FileExeInfo> _ProductCategories
-        public ObservableCollection<FileExeInfo> ProductCategories
+        private ObservableCollection<ProductInfo> _ProductCategories { get; set; }
+        public ObservableCollection<ProductInfo> ProductCategories
         {
             get { return _ProductCategories; }
             set
@@ -30,5 +30,18 @@ namespace AutoBuilderlauncher.ViewModel
                 OnPropertyChanged("ProductCategories");
             }
         }
+        private ProductInfo _SelectedProductCategory { get; set; }
+        public ProductInfo SelectedProductCategory
+        {
+            get { return _SelectedProductCategory; }
+            set
+            {
+                if (_SelectedProductCategory == value) return;
+                _SelectedProductCategory = value;
+
+                OnPropertyChanged("SelectedProductCategory");
+            }
+        }
+        
     }
 }
