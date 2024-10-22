@@ -1,5 +1,7 @@
 ﻿using AutoBuilderlauncher.CommandServices;
+using AutoBuilderlauncher.Model;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace AutoBuilderlauncher.ViewModel
 {
@@ -13,6 +15,19 @@ namespace AutoBuilderlauncher.ViewModel
             {
                 if (_LoadedCommand == value) return;
                 _LoadedCommand = value;
+            }
+        }
+
+        private ObservableCollection<FileExeInfo> _ProductCategories
+        public ObservableCollection<FileExeInfo> ProductCategories
+        {
+            get { return _ProductCategories; }
+            set
+            {
+                if (_ProductCategories == value) return;
+                _ProductCategories = value;
+
+                OnPropertyChanged("ProductCategories");
             }
         }
     }

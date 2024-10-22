@@ -15,8 +15,11 @@
     </i:Interaction.Triggers>
     
     <Grid Background="White">
-        <ComboBox DisplayMemberPath="">
-            
-        </ComboBox>
+        <ComboBox ItemsSource="{Binding ProductCategories}"
+                  SelectedItem="{Binding SelectedProductCategory}"
+                  DisplayMemberPath="ProductName"
+                  Width="200" Height="30"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center" />
     </Grid>
 </UserControl>

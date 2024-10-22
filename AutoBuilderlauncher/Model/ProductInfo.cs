@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace AutoBuilderlauncher.Model
 {
-    public class FileExeInfo
+    public class ProductInfo
     {
         [JsonProperty("path", NullValueHandling = NullValueHandling.Ignore)]
         public string? Path { get; set; }

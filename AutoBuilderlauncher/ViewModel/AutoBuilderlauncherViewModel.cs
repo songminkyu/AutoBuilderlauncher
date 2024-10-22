@@ -29,15 +29,15 @@ namespace AutoBuilderlauncher.ViewModel
                     "productName": "FFR"
                  }                 
                  */
-                FileExeInfo FileExeInfo = new FileExeInfo()
+                ProductInfo FileExeInfo = new ProductInfo()
                 {
-                    Path = "asdasd",
+                    Path = "",
                     OrganName = Enums.OrganCategory.NEC,
                     ProductName = Enums.ProductCategory.FFR
                 };
 
                 HttpProvider httpProvider = new HttpProvider();                
-                await httpProvider.HttpSendMessage<FileExeInfo>(FileExeInfo, "http://localhost:5159/FileExecution/run-file", "utf-8");                 
+                await httpProvider.HttpSendMessage<ProductInfo>(FileExeInfo, "http://localhost:5159/FileExecution/run-file", "utf-8");                 
             });
         }
     }
