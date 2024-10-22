@@ -1,0 +1,28 @@
+﻿<Window x:Class="AutoBuilderlauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoBuilderlauncher"
+        xmlns:viewmodel="clr-namespace:AutoBuilderlauncher.ViewModel"
+        xmlns:viewers="clr-namespace:AutoBuilderlauncher.View"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <DataTemplate 
+	                DataType="{x:Type viewmodel:AutoBuilderlauncherViewModel}">
+                <viewers:AutoBuilderlauncherView DataContext="{Binding}"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <ContentControl
+            Margin="0"
+            Padding="0"
+            Focusable="False"
+            Content="{Binding}" />
+    </Grid>
+</Window>
