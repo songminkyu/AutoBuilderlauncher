@@ -14,7 +14,9 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     
-    <Grid Background="Aqua">
+    <Grid Background="White">
+        <ComboBox DisplayMemberPath="">
             
+        </ComboBox>
     </Grid>
 </UserControl>

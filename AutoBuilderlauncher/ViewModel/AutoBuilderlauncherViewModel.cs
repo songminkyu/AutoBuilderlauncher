@@ -21,7 +21,14 @@ namespace AutoBuilderlauncher.ViewModel
         private async Task LoadedCommandExe(object? arg)
         {
             await Task.Run(async () =>
-            {              
+            {
+                /*
+                 {
+                    "path": "string",
+                    "organName": "NEC",
+                    "productName": "FFR"
+                 }                 
+                 */
                 FileExeInfo FileExeInfo = new FileExeInfo()
                 {
                     Path = "asdasd",
@@ -30,7 +37,7 @@ namespace AutoBuilderlauncher.ViewModel
                 };
 
                 HttpProvider httpProvider = new HttpProvider();                
-                var r = await httpProvider.HttpSendMessage<FileExeInfo>(FileExeInfo, "http://localhost:5159/FileExecution/run-file", "utf-8");                 
+                await httpProvider.HttpSendMessage<FileExeInfo>(FileExeInfo, "http://localhost:5159/FileExecution/run-file", "utf-8");                 
             });
         }
     }
