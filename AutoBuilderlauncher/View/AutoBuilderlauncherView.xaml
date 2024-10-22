@@ -22,7 +22,7 @@
         <Grid Grid.Row="0">
             <StackPanel>
                 <TextBlock FontSize="16" Margin="20,15,0,0" Text="FF Build" Grid.Column="0"/>
-                <ComboBox 
+                <ComboBox Style="{DynamicResource ComboBoxStyle2}"
                           Margin="20,15,0,0"
                           ItemsSource="{Binding ProductCategories}"
                           SelectedItem="{Binding SelectedProductCategory}"
@@ -36,11 +36,12 @@
         </Grid>
         <Grid Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
             <StackPanel Orientation="Horizontal">
-                <Button Height="30" Width="120" Margin="0,0,15,0" Content="요   청" FontSize="13"/>
-                <Button Height="30" Width="120" Content="종   료" FontSize="13"/>
+                <Button Height="30" Width="120" Margin="0,0,15,0" Background="Transparent"   
+                        Command="{Binding RequestCommand}"
+                        Content="요   청" FontSize="13"/>
+                <Button Height="30" Width="120" Content="종   료" FontSize="13" Background="Transparent"
+                        Command="{Binding CancelCommand}"/>
             </StackPanel>
-            
         </Grid>
-        
     </Grid>
 </UserControl>

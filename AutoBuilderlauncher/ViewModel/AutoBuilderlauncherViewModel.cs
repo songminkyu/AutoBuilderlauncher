@@ -9,12 +9,14 @@ namespace AutoBuilderlauncher.ViewModel
     {
         public AutoBuilderlauncherViewModel()
         {
-            LoadedCommand = new AsyncRelayCommand<object>(LoadedCommandExe);
+            LoadedCommand = new RelayCommand<object>(LoadedCommandExe);
+            RequestCommand = new AsyncRelayCommand<object>(RequestCommandExe);
+            CancelCommand = new RelayCommand<object>(CancelCommandExe);
             ProductCategories = new ObservableCollection<ProductInfo>();
             SelectedProductCategory = new ProductInfo();
         }
-
-        private async Task LoadedCommandExe(object? arg)
+     
+        private void LoadedCommandExe(object? arg)
         {
             ProductCategories.Add(new ProductInfo()
             {
@@ -28,19 +30,23 @@ namespace AutoBuilderlauncher.ViewModel
                 OrganName = Enums.OrganCategory.AOS,
                 ProductName = Enums.ProductCategory.FFR
             });            
+            
+        }
+    
+        private async Task RequestCommandExe(object? arg)
+        {
             await Task.Run(async () =>
-            {
-                /*
-                 {
-                    "path": "string",
-                    "organName": "NEC",
-                    "productName": "FFR"
-                 }                 
-                 */
-        
-                HttpProvider httpProvider = new HttpProvider();                
-                await httpProvider.HttpSendMessage<ProductInfo>(ProductCategories[0], "http://localhost:5159/ProductInfo/run-file", "utf-8");                 
+            {        
+                if (SelectedProductCategory != null)
+                {
+                    HttpProvider httpProvider = new HttpProvider();
+                    await httpProvider.HttpSendMessage<ProductInfo>(SelectedProductCategory, "http://localhost:5159/ProductInfo/run-file", "utf-8");
+                }                
             });
+        }
+        private void CancelCommandExe(object? obj)
+        {
+
         }
     }
 }

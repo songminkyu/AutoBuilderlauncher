@@ -7,8 +7,8 @@ namespace AutoBuilderlauncher.ViewModel
 {
     public class AutoBuilderlauncherViewModelBase : BindableBase
     {
-        private IAsyncRelayCommand<object> _LoadedCommand { get; set; }
-        public IAsyncRelayCommand<object> LoadedCommand
+        private IRelayCommand<object> _LoadedCommand { get; set; }
+        public IRelayCommand<object> LoadedCommand
         {
             get { return _LoadedCommand; }
             set
@@ -17,7 +17,27 @@ namespace AutoBuilderlauncher.ViewModel
                 _LoadedCommand = value;
             }
         }
-
+        private IAsyncRelayCommand<object> _RequestCommand { get; set; }
+        public IAsyncRelayCommand<object> RequestCommand
+        {
+            get { return _RequestCommand; }
+            set
+            {
+                if (_RequestCommand == value) return;
+                _RequestCommand = value;
+            }
+        }
+        private IRelayCommand<object> _CancelCommand { get; set; }
+        public IRelayCommand<object> CancelCommand
+        {
+            get { return _CancelCommand; }
+            set
+            {
+                if (_CancelCommand == value) return;
+                _CancelCommand = value;
+            }
+        }
+        
         private ObservableCollection<ProductInfo> _ProductCategories { get; set; }
         public ObservableCollection<ProductInfo> ProductCategories
         {
