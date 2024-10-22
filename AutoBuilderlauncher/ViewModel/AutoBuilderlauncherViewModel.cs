@@ -60,7 +60,7 @@ namespace AutoBuilderlauncher.ViewModel
             {
                 res = await httpProvider.HttpSendMessage<ProductInfo>(selected, "http://172.16.10.86:5159/ProductInfo/run-file", "utf-8");
             });
-            if (res.ErrorCode != 200)
+            if (res.ErrorCode >= 400 || res.ErrorCode == -1)
             {
                 MessageBox.Show(res.ResponseData, "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
