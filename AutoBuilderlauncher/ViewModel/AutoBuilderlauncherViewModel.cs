@@ -40,13 +40,13 @@ namespace AutoBuilderlauncher.ViewModel
                 if (SelectedProductCategory != null)
                 {
                     HttpProvider httpProvider = new HttpProvider();
-                    await httpProvider.HttpSendMessage<ProductInfo>(SelectedProductCategory, "http://localhost:5159/ProductInfo/run-file", "utf-8");
+                    await httpProvider.HttpSendMessage<ProductInfo>(SelectedProductCategory, "http://172.16.10.86:5159/ProductInfo/run-file", "utf-8");
                 }                
             });
         }
         private void CancelCommandExe(object? obj)
         {
-
+            Environment.Exit(0);
         }
     }
 }
