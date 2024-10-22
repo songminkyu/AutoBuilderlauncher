@@ -111,5 +111,30 @@ namespace AutoBuilderlauncher.ViewModel
                 OnPropertyChanged("SelectedMobileProductCategory");
             }
         }
+        private bool _IsSelectedDisk { get; set; }
+        public bool IsSelectedDisk
+        {
+            get { return _IsSelectedDisk; }
+            set
+            {
+                if (_IsSelectedDisk == value) return;
+                _IsSelectedDisk = value;
+
+                OnPropertyChanged("IsSelectedDisk");
+            }
+        }
+        private bool _IsSelectedMobile { get; set; }
+        public bool IsSelectedMobile
+        {
+            get { return _IsSelectedMobile; }
+            set
+            {
+                if (_IsSelectedMobile == value) return;
+                _IsSelectedMobile = value;
+
+                OnPropertyChanged("IsSelectedMobile");
+            }
+        }
+        
     }
 }
