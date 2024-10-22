@@ -5,6 +5,7 @@
         FFR,
         FFR_Portable,
         FMFR,
-        FMLR
+        FMLR,
+        None
     }
 }

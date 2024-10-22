@@ -4,6 +4,7 @@
     {
         NEC,
         SPO,
-        AOS
+        AOS,
+        None
     }
 }

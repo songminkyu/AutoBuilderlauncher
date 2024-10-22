@@ -18,23 +18,51 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel>
                 <TextBlock FontSize="16" Margin="20,15,0,0" Text="FF Build" Grid.Column="0"/>
                 <ComboBox Style="{DynamicResource ComboBoxStyle2}"
                           Margin="20,15,0,0"
-                          ItemsSource="{Binding ProductCategories}"
-                          SelectedItem="{Binding SelectedProductCategory}"
+                          ItemsSource="{Binding DiskProductCategories}"
+                          SelectedItem="{Binding SelectedDiskProductCategory}"
                           SelectedIndex="0"                          
                           DisplayMemberPath="ProductName"
                           Width="200" Height="26"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Center" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseUp" >
+                        <i:InvokeCommandAction Command="{Binding DiskProductChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </StackPanel>
            
         </Grid>
-        <Grid Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
+        <Grid Grid.Row="1">
+            <StackPanel>
+                <TextBlock FontSize="16" Margin="20,15,0,0" Text="FF Build" Grid.Column="0"/>
+                <ComboBox Style="{DynamicResource ComboBoxStyle2}"
+                   Margin="20,15,0,0"
+                   ItemsSource="{Binding MobileProductCategories}"
+                   SelectedItem="{Binding SelectedMobileProductCategory}"
+                   SelectedIndex="0"                          
+                   DisplayMemberPath="ProductName"
+                   Width="200" Height="26"
+                   HorizontalAlignment="Left"                 
+                   VerticalAlignment="Center" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseUp" >
+                            <i:InvokeCommandAction Command="{Binding MobileProductChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+            </StackPanel>
+
+        </Grid>
+        <Grid Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
             <StackPanel Orientation="Horizontal">
                 <Button Height="30" Width="120" Margin="0,0,15,0" Background="Transparent"   
                         Command="{Binding RequestCommand}"
@@ -43,5 +71,7 @@
                         Command="{Binding CancelCommand}"/>
             </StackPanel>
         </Grid>
+        
+        
     </Grid>
 </UserControl>

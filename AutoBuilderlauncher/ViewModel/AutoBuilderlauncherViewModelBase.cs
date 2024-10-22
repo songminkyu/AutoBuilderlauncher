@@ -7,6 +7,7 @@ namespace AutoBuilderlauncher.ViewModel
 {
     public class AutoBuilderlauncherViewModelBase : BindableBase
     {
+        protected bool IsSelectedFF { get; set; }
         private IRelayCommand<object> _LoadedCommand { get; set; }
         public IRelayCommand<object> LoadedCommand
         {
@@ -17,6 +18,30 @@ namespace AutoBuilderlauncher.ViewModel
                 _LoadedCommand = value;
             }
         }
+
+        private IRelayCommand<object> _DiskProductChangedCommand { get; set; }
+        public IRelayCommand<object> DiskProductChangedCommand
+        {
+            get { return _DiskProductChangedCommand; }
+            set
+            {
+                if (_DiskProductChangedCommand == value) return;
+                _DiskProductChangedCommand = value;
+            }
+        }
+
+
+        private IRelayCommand<object> _MobileProductChangedCommand { get; set; }
+        public IRelayCommand<object> MobileProductChangedCommand
+        {
+            get { return _MobileProductChangedCommand; }
+            set
+            {
+                if (_MobileProductChangedCommand == value) return;
+                _MobileProductChangedCommand = value;
+            }
+        }
+
         private IAsyncRelayCommand<object> _RequestCommand { get; set; }
         public IAsyncRelayCommand<object> RequestCommand
         {
@@ -38,30 +63,53 @@ namespace AutoBuilderlauncher.ViewModel
             }
         }
         
-        private ObservableCollection<ProductInfo> _ProductCategories { get; set; }
-        public ObservableCollection<ProductInfo> ProductCategories
+        private ObservableCollection<ProductInfo> _DiskProductCategories { get; set; }
+        public ObservableCollection<ProductInfo> DiskProductCategories
         {
-            get { return _ProductCategories; }
+            get { return _DiskProductCategories; }
             set
             {
-                if (_ProductCategories == value) return;
-                _ProductCategories = value;
+                if (_DiskProductCategories == value) return;
+                _DiskProductCategories = value;
 
-                OnPropertyChanged("ProductCategories");
+                OnPropertyChanged("DiskProductCategories");
             }
         }
-        private ProductInfo _SelectedProductCategory { get; set; }
-        public ProductInfo SelectedProductCategory
+        private ProductInfo _SelectedDiskProductCategory { get; set; }
+        public ProductInfo SelectedDiskProductCategory
         {
-            get { return _SelectedProductCategory; }
+            get { return _SelectedDiskProductCategory; }
             set
             {
-                if (_SelectedProductCategory == value) return;
-                _SelectedProductCategory = value;
+                if (_SelectedDiskProductCategory == value) return;
+                _SelectedDiskProductCategory = value;
 
-                OnPropertyChanged("SelectedProductCategory");
+                OnPropertyChanged("SelectedDiskProductCategory");
             }
         }
-        
+        private ObservableCollection<ProductInfo> _MobileProductCategories { get; set; }
+        public ObservableCollection<ProductInfo> MobileProductCategories
+        {
+            get { return _MobileProductCategories; }
+            set
+            {
+                if (_MobileProductCategories == value) return;
+                _MobileProductCategories = value;
+
+                OnPropertyChanged("MobileProductCategories");
+            }
+        }
+        private ProductInfo _SelectedMobileProductCategory { get; set; }
+        public ProductInfo SelectedMobileProductCategory
+        {
+            get { return _SelectedMobileProductCategory; }
+            set
+            {
+                if (_SelectedMobileProductCategory == value) return;
+                _SelectedMobileProductCategory = value;
+
+                OnPropertyChanged("SelectedMobileProductCategory");
+            }
+        }
     }
 }
