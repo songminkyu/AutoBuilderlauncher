@@ -7,7 +7,6 @@ namespace AutoBuilderlauncher.ViewModel
 {
     public class AutoBuilderlauncherViewModelBase : BindableBase
     {
-        protected bool IsSelectedFF { get; set; }
         private IRelayCommand<object> _LoadedCommand { get; set; }
         public IRelayCommand<object> LoadedCommand
         {
@@ -17,31 +16,7 @@ namespace AutoBuilderlauncher.ViewModel
                 if (_LoadedCommand == value) return;
                 _LoadedCommand = value;
             }
-        }
-
-        private IRelayCommand<object> _DiskProductChangedCommand { get; set; }
-        public IRelayCommand<object> DiskProductChangedCommand
-        {
-            get { return _DiskProductChangedCommand; }
-            set
-            {
-                if (_DiskProductChangedCommand == value) return;
-                _DiskProductChangedCommand = value;
-            }
-        }
-
-
-        private IRelayCommand<object> _MobileProductChangedCommand { get; set; }
-        public IRelayCommand<object> MobileProductChangedCommand
-        {
-            get { return _MobileProductChangedCommand; }
-            set
-            {
-                if (_MobileProductChangedCommand == value) return;
-                _MobileProductChangedCommand = value;
-            }
-        }
-
+        }    
         private IAsyncRelayCommand<object> _RequestCommand { get; set; }
         public IAsyncRelayCommand<object> RequestCommand
         {

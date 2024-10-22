@@ -11,17 +11,15 @@ namespace AutoBuilderlauncher.ViewModel
     {
         public AutoBuilderlauncherViewModel()
         {
-            IsSelectedFF = true;
+            IsSelectedDisk = true;
+            IsSelectedMobile = false;
             LoadedCommand = new RelayCommand<object>(LoadedCommandExe);
             RequestCommand = new AsyncRelayCommand<object>(RequestCommandExe);
             CancelCommand = new RelayCommand<object>(CancelCommandExe);
             DiskProductCategories = new ObservableCollection<ProductInfo>();
             SelectedDiskProductCategory = new ProductInfo();
             MobileProductCategories = new ObservableCollection<ProductInfo>();
-            SelectedMobileProductCategory = new ProductInfo();
-
-            DiskProductChangedCommand = new RelayCommand<object>(DiskProductChangedCommandExe);
-            MobileProductChangedCommand = new RelayCommand<object>(MobileProductChangedCommandExe);
+            SelectedMobileProductCategory = new ProductInfo();       
         }
 
         private void LoadedCommandExe(object? arg)
@@ -51,15 +49,7 @@ namespace AutoBuilderlauncher.ViewModel
                 ProductName = Enums.ProductCategory.FMLR
             });
         }
-        private void DiskProductChangedCommandExe(object? obj)
-        {
-            IsSelectedFF = true;
-        }
 
-        private void MobileProductChangedCommandExe(object? obj)
-        {
-            IsSelectedFF = false;
-        }
 
         private async Task RequestCommandExe(object? arg)
         {

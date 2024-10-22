@@ -26,7 +26,7 @@
                 <RadioButton Margin="20,15,0,0" Grid.Column="0" GroupName="Product" IsChecked="{Binding IsSelectedDisk}">
                     <TextBlock Margin="0,-1,0,0" FontSize="14" Text="Disk Build" />    
                 </RadioButton>
-                
+
                 <ComboBox Style="{DynamicResource ComboBoxStyle2}"
                           Margin="20,15,0,0"
                           ItemsSource="{Binding DiskProductCategories}"
@@ -36,11 +36,6 @@
                           Width="200" Height="26"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Center" />
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewMouseUp" >
-                        <i:InvokeCommandAction Command="{Binding DiskProductChangedCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </StackPanel>
            
         </Grid>
@@ -58,11 +53,6 @@
                    Width="200" Height="26"
                    HorizontalAlignment="Left"                 
                    VerticalAlignment="Center" >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseUp" >
-                            <i:InvokeCommandAction Command="{Binding MobileProductChangedCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                 </ComboBox>
             </StackPanel>
 
