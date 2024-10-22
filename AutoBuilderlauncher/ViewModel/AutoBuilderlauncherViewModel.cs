@@ -55,15 +55,20 @@ namespace AutoBuilderlauncher.ViewModel
         {
             HttpProvider httpProvider = new HttpProvider();
             var selected = IsSelectedDisk == true ? SelectedDiskProductCategory : SelectedMobileProductCategory;
-          
+            HttpResultData<ProductInfo> res = new HttpResultData<ProductInfo>();
             await Task.Run(async () =>
-            {                
-                await httpProvider.HttpSendMessage<ProductInfo>(selected, "http://172.16.10.86:5159/ProductInfo/run-file", "utf-8");
+            {
+                res = await httpProvider.HttpSendMessage<ProductInfo>(selected, "http://172.16.10.86:5159/ProductInfo/run-file", "utf-8");
             });
-
-            string message = string.Format("{0} 빌드 완료 되었습니다.", selected.ProductName);
-            MessageBox.Show(message, "알림", MessageBoxButton.OK, MessageBoxImage.Information);
-
+            if (res.ErrorCode != 200)
+            {
+                MessageBox.Show(res.ResponseData, "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                string message = string.Format("{0} 빌드 완료 되었습니다.", selected.ProductName);
+                MessageBox.Show(message, "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+            }                 
         }
         private void CancelCommandExe(object? obj)
         {
