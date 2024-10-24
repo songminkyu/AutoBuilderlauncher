@@ -15,7 +15,7 @@ namespace AutoBuilderlauncher.Model
             ArrayModelContext = new TContext[] { };
         }
         public string ResponseData { get; set; }
-        public int ErrorCode { get; set; } = 0;
+        public int HttpStatusCode { get; set; } = 0;
         public ApiStatusType ApiStatus { get; set; }
         public TContext ModelContext { get; set; }
         public TContext[] ArrayModelContext { get; set; }

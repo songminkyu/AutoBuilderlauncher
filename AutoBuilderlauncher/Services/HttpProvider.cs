@@ -1,91 +1,74 @@
-﻿
-using AutoBuilderlauncher.Model;
+﻿using AutoBuilderlauncher.Model;
 using System.IO;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AutoBuilderlauncher.Service
 {
-   
     public class HttpProvider
     {
+        private static readonly HttpClient httpClient;
         private static readonly AsyncLock mutex = new AsyncLock();
-        public HttpProvider()
-        {          
+
+        static HttpProvider()
+        {
+            var handler = new HttpClientHandler();
+
+            // HTTPS 인증서 검증을 무시하는 콜백 설정 (보안 위험 있음)
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+
+            httpClient = new HttpClient(handler)
+            {
+                Timeout = TimeSpan.FromMinutes(10) // 최대 10분까지 대기
+            };
         }
-        
-        private async Task<HttpResultData<TContext>> HttpSendJsonStreamMessage<TContext>(string PostMsg, string url, string encode, 
-                                                                                         string Method = WebRequestMethods.Http.Post) 
+
+        public HttpProvider()
+        {
+        }
+
+        private async Task<HttpResultData<TContext>> HttpSendJsonStreamMessage<TContext>(string PostMsg, string url, string encode,
+                                                                                         string Method = "POST")
             where TContext : class, new()
         {
-            string ResponseGetString = string.Empty;
-            int ErrorCode = 0;
             HttpResultData<TContext> Result = new HttpResultData<TContext>();
-
-            if (url.IndexOf("https://") >= 0)
-            {
-                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
-            }
 
             try
             {
-                HttpWebRequest HttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-                HttpWebRequest.Method = Method;
-                HttpWebRequest.Timeout = 600000; //원격서버 빌드가 오래걸리므로 최대 10분까지 기다림
-                Stream RequestStream = null;
-                byte[] SendData = null;
+                var request = new HttpRequestMessage(new HttpMethod(Method), url);
 
                 if (PostMsg != null)
-                {                                       
-                    SendData                     = UTF8Encoding.UTF8.GetBytes(PostMsg);
-                    HttpWebRequest.ContentType   = $"application/json; charset={encode}";
-                    HttpWebRequest.ContentLength = SendData.Length;
-                    RequestStream                = await HttpWebRequest.GetRequestStreamAsync();
-                    await RequestStream.WriteAsync(SendData, 0, SendData.Length);
-                }
-                else
                 {
-                    HttpWebRequest.ContentLength = 0;
-                    RequestStream                = await HttpWebRequest.GetRequestStreamAsync();
+                    var content = new StringContent(PostMsg, Encoding.GetEncoding(encode), "application/json");
+                    request.Content = content;
                 }
-                await RequestStream.FlushAsync();
-                RequestStream.Close();
 
-                HttpWebResponse httpWebResponse = (HttpWebResponse)await HttpWebRequest.GetResponseAsync();
-                StreamReader streamReader       = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding(encode));
-                ResponseGetString               = await streamReader.ReadToEndAsync();
-                streamReader.Close();
-                httpWebResponse.Close();
+                var response = await httpClient.SendAsync(request);
+                string ResponseGetString = await response.Content.ReadAsStringAsync();
 
-                Result.ErrorCode                = ErrorCode;
-                Result.ResponseData             = ResponseGetString;
-
+                Result.HttpStatusCode = (int)response.StatusCode;
+                Result.ResponseData = ResponseGetString;
             }
-            catch (WebException ex)
+            catch (HttpRequestException ex)
             {
-                if (ex.Response is HttpWebResponse)
-                {
-                    Result.ErrorCode    = (int)((HttpWebResponse)ex.Response).StatusCode;
-                    Result.ResponseData = ex.Message;
-                }
-                else
-                {
-                    Result.ErrorCode    = -1;
-                    Result.ResponseData = ex.Message;
-                }              
+                Result.HttpStatusCode = -1;
+                Result.ResponseData = ex.Message;
             }
-        
+
             return Result;
-        }   
-        public async Task<HttpResultData<TContext>> HttpSendMessage<TContext>(TContext SendMessage, string url, string encode, 
-                                                                              string Method = WebRequestMethods.Http.Post)
+        }
+
+        public async Task<HttpResultData<TContext>> HttpSendMessage<TContext>(TContext SendMessage, string url, string encode,
+                                                                              string Method = "POST")
             where TContext : class, new()
-        {            
+        {
             HttpResultData<TContext> Result = new HttpResultData<TContext>();
 
             using (await mutex.LockAsync())
-            {              
+            {
                 try
                 {
                     string PostMsg = string.Empty;
@@ -96,9 +79,9 @@ namespace AutoBuilderlauncher.Service
                 }
                 catch (Exception ex)
                 {
-                    Result.ErrorCode = -1;
-                    Result.ResponseData = ex.Message;                    
-                }               
+                    Result.HttpStatusCode = -1;
+                    Result.ResponseData = ex.Message;
+                }
             }
             return Result;
         }
@@ -106,41 +89,29 @@ namespace AutoBuilderlauncher.Service
         private async Task<HttpResultData<TContext>> HttpGetReponseMessage<TContext>(string Url)
             where TContext : class, new()
         {
-            string ResponseGetString = string.Empty;
-            int ErrorCode = 0;
-            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(Url);
-
             HttpResultData<TContext> Result = new HttpResultData<TContext>();
 
             try
             {
-                Request.Method = WebRequestMethods.Http.Get;
-                Request.ContentType = "application/json;charset=utf-8";
-                HttpWebResponse response = (HttpWebResponse)await Request.GetResponseAsync();
-                Stream RespPostStream = response.GetResponseStream();
-                StreamReader ReaderPost = new StreamReader(RespPostStream, Encoding.UTF8);
-                ResponseGetString = await ReaderPost.ReadToEndAsync();
+                var request = new HttpRequestMessage(HttpMethod.Get, Url);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                Result.ErrorCode = ErrorCode;
+                var response = await httpClient.SendAsync(request);
+                string ResponseGetString = await response.Content.ReadAsStringAsync();
+
+                Result.HttpStatusCode = (int)response.StatusCode;
                 Result.ResponseData = ResponseGetString;
             }
-            catch (WebException ex)
+            catch (HttpRequestException ex)
             {
-                if (ex.Response is HttpWebResponse)
-                {
-                    Result.ErrorCode = (int)((HttpWebResponse)ex.Response).StatusCode;
-                    Result.ResponseData = ex.Message;
-                }
-                else
-                {
-                    Result.ErrorCode = -1;
-                    Result.ResponseData = ex.Message;
-                }
+                Result.HttpStatusCode = -1;
+                Result.ResponseData = ex.Message;
             }
 
             return Result;
         }
-        public async Task<HttpResultData<TContext>> HTTPGetMessage<TContext>(string Url) 
+
+        public async Task<HttpResultData<TContext>> HTTPGetMessage<TContext>(string Url)
             where TContext : class, new()
         {
             using (await mutex.LockAsync())
@@ -151,7 +122,7 @@ namespace AutoBuilderlauncher.Service
                 {
                     Result = await HttpGetReponseMessage<TContext>(Url);
 
-                    if (Result.ErrorCode == 0)
+                    if (Result.HttpStatusCode == 200)
                     {
                         ConverterJson json = new ConverterJson();
                         Result.ModelContext = json.DeserializeFromJson<TContext>(Result.ResponseData);
@@ -159,16 +130,17 @@ namespace AutoBuilderlauncher.Service
                 }
                 catch (Exception ex)
                 {
-                    Result.ErrorCode = -1;
+                    Result.HttpStatusCode = -1;
                     Result.ResponseData = ex.Message;
                 }
 
                 return Result;
-            }          
+            }
         }
-        public async Task<HttpResultData<TContext>> HTTPGetMessages<TContext>(string Url) 
+
+        public async Task<HttpResultData<TContext>> HTTPGetMessages<TContext>(string Url)
             where TContext : class, new()
-        {            
+        {
             using (await mutex.LockAsync())
             {
                 HttpResultData<TContext> Result = new HttpResultData<TContext>();
@@ -176,7 +148,7 @@ namespace AutoBuilderlauncher.Service
                 {
                     Result = await HttpGetReponseMessage<TContext>(Url);
 
-                    if (Result.ErrorCode == 0)
+                    if (Result.HttpStatusCode == 200)
                     {
                         ConverterJson json = new ConverterJson();
                         Result.ArrayModelContext = json.DeserializeFromArrayJson<TContext>(Result.ResponseData);
@@ -188,12 +160,13 @@ namespace AutoBuilderlauncher.Service
                 }
                 catch (Exception ex)
                 {
-                    Result.ErrorCode = -1;
-                    Result.ResponseData = ex.Message;                 
+                    Result.HttpStatusCode = -1;
+                    Result.ResponseData = ex.Message;
                 }
                 return Result;
-            }                       
-        }   
+            }
+        }
+
         public string JoinUriSegments(string uri, params string[] segments)
         {
             if (string.IsNullOrWhiteSpace(uri))
@@ -203,7 +176,6 @@ namespace AutoBuilderlauncher.Service
                 return uri;
 
             return segments.Aggregate(uri, (current, segment) => $"{current.TrimEnd('/')}/{segment.TrimStart('/')}");
-        } 
+        }
     }
-
 }
