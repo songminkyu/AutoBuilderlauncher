@@ -59,9 +59,9 @@ namespace AutoBuilderlauncher.ViewModel
             {
                 HttpProvider httpProvider;
                 if (IsSelectedDisk == true)
-                    httpProvider = new HttpProvider(10);
+                    httpProvider = new HttpProvider(10); //디스크는 대략 10분까지
                 else
-                    httpProvider = new HttpProvider(30); //FMF 장시간 빌드로 인해서 시간 다수 필요
+                    httpProvider = new HttpProvider(35); //모바일은 플러그인 장시간 빌드로 인해서 시간 다수 필요
 
                 res = await httpProvider.HttpSendMessage<ProductInfo>(selected, "http://172.16.10.86:5159/ProductInfo/run-file", "utf-8");
             });
