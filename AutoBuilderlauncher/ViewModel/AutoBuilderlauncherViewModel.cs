@@ -52,12 +52,17 @@ namespace AutoBuilderlauncher.ViewModel
 
 
         private async Task RequestCommandExe(object? arg)
-        {
-            HttpProvider httpProvider = new HttpProvider();
+        {          
             var selected = IsSelectedDisk == true ? SelectedDiskProductCategory : SelectedMobileProductCategory;
             HttpResultData<ProductInfo> res = new HttpResultData<ProductInfo>();
             await Task.Run(async () =>
             {
+                HttpProvider httpProvider;
+                if (IsSelectedDisk == true)
+                    httpProvider = new HttpProvider(10);
+                else
+                    httpProvider = new HttpProvider(30); //FMF 장시간 빌드로 인해서 시간 다수 필요
+
                 res = await httpProvider.HttpSendMessage<ProductInfo>(selected, "http://172.16.10.86:5159/ProductInfo/run-file", "utf-8");
             });
             if (res.HttpStatusCode >= 400 || res.HttpStatusCode == -1)

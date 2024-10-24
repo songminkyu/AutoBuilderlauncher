@@ -10,10 +10,11 @@ namespace AutoBuilderlauncher.Service
 {
     public class HttpProvider
     {
-        private static readonly HttpClient httpClient;
         private static readonly AsyncLock mutex = new AsyncLock();
-
-        static HttpProvider()
+        private readonly HttpClient httpClient;   
+        private int Timeout;
+       
+        public HttpProvider(int Timeout)
         {
             var handler = new HttpClientHandler();
 
@@ -22,18 +23,14 @@ namespace AutoBuilderlauncher.Service
 
             httpClient = new HttpClient(handler)
             {
-                Timeout = TimeSpan.FromMinutes(10) // 최대 10분까지 대기
+                Timeout = TimeSpan.FromMinutes(Timeout)
             };
-        }
-
-        public HttpProvider()
-        {
         }
 
         private async Task<HttpResultData<TContext>> HttpSendJsonStreamMessage<TContext>(string PostMsg, string url, string encode,
                                                                                          string Method = "POST")
             where TContext : class, new()
-        {
+        {            
             HttpResultData<TContext> Result = new HttpResultData<TContext>();
 
             try
@@ -75,7 +72,7 @@ namespace AutoBuilderlauncher.Service
 
                     ConverterJson json = new ConverterJson();
                     PostMsg = json.SerializeToJson<TContext>(SendMessage);
-                    Result = await HttpSendJsonStreamMessage<TContext>(PostMsg, url, encode, Method);
+                    //Result = await HttpSendJsonStreamMessage<TContext>(PostMsg, url, encode, Method);
                 }
                 catch (Exception ex)
                 {
