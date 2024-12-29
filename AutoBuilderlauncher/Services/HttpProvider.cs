@@ -72,7 +72,7 @@ namespace AutoBuilderlauncher.Service
 
                     ConverterJson json = new ConverterJson();
                     PostMsg = json.SerializeToJson<TContext>(SendMessage);
-                    //Result = await HttpSendJsonStreamMessage<TContext>(PostMsg, url, encode, Method);
+                    Result = await HttpSendJsonStreamMessage<TContext>(PostMsg, url, encode, Method);
                 }
                 catch (Exception ex)
                 {
