@@ -79,6 +79,7 @@ namespace AutoBuilderlauncher.ViewModel
         {
             await Task.Run(async () =>
             {
+                // 파이썬 fastapi 서버 Test api
                 HttpProvider httpProvider = new HttpProvider();
                 var version = await httpProvider.HTTPGetMessage<ServerInfo>("http://127.0.0.1:8000/version");
                 ServerInfo get_version = version.ModelContext;
