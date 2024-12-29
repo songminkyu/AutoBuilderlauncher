@@ -60,6 +60,9 @@
         <Grid Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
             <StackPanel Orientation="Horizontal">
                 <Button Height="30" Width="120" Margin="0,0,15,0" Background="Transparent"   
+                        Command="{Binding VersionInfoCommand}"
+                        Content="버전 정보" FontSize="13"/>
+                <Button Height="30" Width="120" Margin="0,0,15,0" Background="Transparent"   
                         Command="{Binding RequestCommand}"
                         Content="요   청" FontSize="13"/>
                 <Button Height="30" Width="120" Content="종   료" FontSize="13" Background="Transparent"

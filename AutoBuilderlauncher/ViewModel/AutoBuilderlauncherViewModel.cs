@@ -3,7 +3,6 @@ using AutoBuilderlauncher.Service;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 
 namespace AutoBuilderlauncher.ViewModel
 {
@@ -16,6 +15,7 @@ namespace AutoBuilderlauncher.ViewModel
             LoadedCommand = new RelayCommand<object>(LoadedCommandExe);
             RequestCommand = new AsyncRelayCommand<object>(RequestCommandExe);
             CancelCommand = new RelayCommand<object>(CancelCommandExe);
+            VersionInfoCommand = new AsyncRelayCommand<object>(VersionInfoCommandExe);
             DiskProductCategories = new ObservableCollection<ProductInfo>();
             SelectedDiskProductCategory = new ProductInfo();
             MobileProductCategories = new ObservableCollection<ProductInfo>();
@@ -74,6 +74,16 @@ namespace AutoBuilderlauncher.ViewModel
                 string message = string.Format("{0} 빌드 완료 되었습니다.", selected.ProductName);
                 MessageBox.Show(message, "알림", MessageBoxButton.OK, MessageBoxImage.Information);
             }                 
+        }
+        private async Task VersionInfoCommandExe(object? arg)
+        {
+            await Task.Run(async () =>
+            {
+                HttpProvider httpProvider = new HttpProvider();
+                var version = await httpProvider.HTTPGetMessage<ServerInfo>("http://127.0.0.1:8000/version");
+                ServerInfo get_version = version.ModelContext;
+                MessageBox.Show(get_version.version);
+            });
         }
         private void CancelCommandExe(object? obj)
         {

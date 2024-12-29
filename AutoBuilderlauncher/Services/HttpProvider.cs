@@ -14,17 +14,24 @@ namespace AutoBuilderlauncher.Service
         private readonly HttpClient httpClient;   
         private int Timeout;
        
-        public HttpProvider(int Timeout)
+        public HttpProvider(int Timeout = 0)
         {
             var handler = new HttpClientHandler();
 
             // HTTPS 인증서 검증을 무시하는 콜백 설정 (보안 위험 있음)
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
 
-            httpClient = new HttpClient(handler)
+            if(Timeout == 0)
             {
-                Timeout = TimeSpan.FromMinutes(Timeout)
-            };
+                httpClient = new HttpClient();
+            }
+            else
+            {
+                httpClient = new HttpClient(handler)
+                {
+                    Timeout = TimeSpan.FromMinutes(Timeout)
+                };
+            }
         }
 
         private async Task<HttpResultData<TContext>> HttpSendJsonStreamMessage<TContext>(string PostMsg, string url, string encode,

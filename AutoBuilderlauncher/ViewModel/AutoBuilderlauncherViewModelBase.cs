@@ -37,6 +37,16 @@ namespace AutoBuilderlauncher.ViewModel
                 _CancelCommand = value;
             }
         }
+        private IAsyncRelayCommand<object> _VersionInfoCommand { get; set; }
+        public IAsyncRelayCommand<object> VersionInfoCommand
+        {
+            get { return _VersionInfoCommand; }
+            set
+            {
+                if (_VersionInfoCommand == value) return;
+                _VersionInfoCommand = value;
+            }
+        }
         
         private ObservableCollection<ProductInfo> _DiskProductCategories { get; set; }
         public ObservableCollection<ProductInfo> DiskProductCategories
